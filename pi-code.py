@@ -1,44 +1,46 @@
-from pickle import TRUE
 import RPi.GPIO as GPIO
 import time
-t=30
-def countdown(t):
-	
-	while t:
-		mins, secs = divmod(t, 60)
-		timer = '{:02d}:{:02d}'.format(mins, secs)
-		print(timer, end="\r")
-		time.sleep(1)
-		t -= 1
 
-PIR = 26
-LED_R = 11
-LED_G = 13
-LED_Y = 15
-BUZZER= 7
+# Raspberry Pi Pin Setup
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BCM)
+PIR = 26
+LED_Red = 11 # Warning LED
+LED_Green = 13 # State LED
+LED_Yellow = 15 # Alarm LED
+BUZZER = 7
 GPIO.setup(PIR, GPIO.IN)
-GPIO.setup(LED_G,GPIO.OUT)
-GPIO.setup(LED_Y, GPIO.OUT)
-GPIO.output(LED_G, GPIO.HIGH)
-GPIO.output(LED_Y, GPIO.LOW)
-
-buzzState = False
-
+GPIO.setup(LED_Red, GPIO.OUT)
+GPIO.setup(LED_Green,GPIO.OUT)
+GPIO.setup(LED_Yellow, GPIO.OUT)
 GPIO.setup(BUZZER, GPIO.OUT)
+GPIO.output(LED_Green, GPIO.HIGH)
+GPIO.output(LED_Yellow, GPIO.LOW)
+GPIO.output(LED_Red, GPIO.LOW)
+GPIO.output(BUZZER, GPIO.LOW)
 
-if(GPIO.input(PIR)==TRUE):
-        GPIO.output(LED_G, GPIO.LOW)
-        GPIO.output(LED_Y, GPIO.HIGH)
-        buzzState = not buzzState
-        GPIO.output(BUZZER, buzzState)
-        time.sleep(1)
-        countdown()
-        if(GPIO.input(PIR)==True):
-                GPIO.output(LED_G, GPIO.LOW)
-                GPIO.output(LED_Y, GPIO.LOW)
-                GPIO.output(LED_R, GPIO.HIGH)
-else:
-        GPIO.output(LED_G, GPIO.HIGH)
-        GPIO.output(LED_Y, GPIO.LOW)
+
+while True:
+    i = GPIO.input(26)
+    # No Motion
+    if i == 0:
+        GPIO.output(LED_Green, GPIO.HIGH)
+        GPIO.output(LED_Yellow, GPIO.LOW)
+        GPIO.output(LED_Red, GPIO.LOW)
+        GPIO.output(BUZZER, GPIO.LOW)
+    # Motion Detected
+    elif i == 1:
+        start = time.time()
+        GPIO.output(LED_Green, GPIO.LOW)
+        GPIO.output(LED_Yellow, GPIO.HIGH)
+        GPIO.output(LED_Red, GPIO.LOW)
+        GPIO.output(BUZZER, GPIO.HIGH)
+
+        # Final Alert
+        if start > 30:
+                GPIO.output(LED_Green, GPIO.LOW)
+                GPIO.output(LED_Yellow, GPIO.LOW)
+                GPIO.output(LED_Red, GPIO.HIGH)
+                GPIO.output(BUZZER, GPIO.LOW)
+
+    time.sleep(1)
