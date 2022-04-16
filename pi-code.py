@@ -11,13 +11,12 @@ def countdown(t):
 		time.sleep(1)
 		t -= 1
 
-PIR = 29
+PIR = 26
 LED_R = 11
 LED_G = 13
 LED_Y = 15
-BUZZER= 23
+BUZZER= 7
 GPIO.setwarnings(False)
-GPIO.setmode(GPIO.BOARD)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(PIR, GPIO.IN)
 GPIO.setup(LED_G,GPIO.OUT)
