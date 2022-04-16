@@ -15,18 +15,26 @@ PIR = 29
 LED_R = 11
 LED_G = 13
 LED_Y = 15
+BUZZER= 23
 GPIO.setwarnings(False)
 GPIO.setmode(GPIO.BOARD)
+GPIO.setmode(GPIO.BCM)
 GPIO.setup(PIR, GPIO.IN)
 GPIO.setup(LED_G,GPIO.OUT)
 GPIO.setup(LED_Y, GPIO.OUT)
 GPIO.output(LED_G, GPIO.HIGH)
 GPIO.output(LED_Y, GPIO.LOW)
 
+buzzState = False
+
+GPIO.setup(BUZZER, GPIO.OUT)
 
 if(GPIO.input(PIR)==TRUE):
         GPIO.output(LED_G, GPIO.LOW)
         GPIO.output(LED_Y, GPIO.HIGH)
+        buzzState = not buzzState
+        GPIO.output(BUZZER, buzzState)
+        time.sleep(1)
         countdown()
         if(GPIO.input(PIR)==True):
                 GPIO.output(LED_G, GPIO.LOW)
