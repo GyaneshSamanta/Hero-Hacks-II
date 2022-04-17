@@ -50,6 +50,7 @@ def twilWarning(channel):
      )
    print(message.sid)
 
+
 # Check Sensor Data
 while True:
     i = GPIO.input(26)
@@ -67,7 +68,20 @@ while True:
         GPIO.output(LED_Red, GPIO.LOW)
         GPIO.output(BUZZER, GPIO.HIGH)
         twilAlarm()
-
+        time.sleep(5)
+        # No Motion
+    if i == 0:
+        GPIO.output(LED_Green, GPIO.HIGH)
+        GPIO.output(LED_Yellow, GPIO.LOW)
+        GPIO.output(LED_Red, GPIO.LOW)
+        GPIO.output(BUZZER, GPIO.LOW)
+    elif i == 1:
+        GPIO.output(LED_Green, GPIO.LOW)
+        GPIO.output(LED_Yellow, GPIO.LOW)
+        GPIO.output(LED_Red, GPIO.HIGH)
+        GPIO.output(BUZZER, GPIO.LOW)
+        twilWarning()
+        time.sleep(5)
     time.sleep(1)
 
 GPIO.cleanup()
