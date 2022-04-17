@@ -1,3 +1,4 @@
+from twilio.rest import Client
 import RPi.GPIO as GPIO
 import time
 
@@ -21,7 +22,35 @@ GPIO.output(LED_Yellow, GPIO.LOW)
 GPIO.output(LED_Red, GPIO.LOW)
 GPIO.output(BUZZER, GPIO.LOW)
 
+# Twilio Account Setup
+account_sid = '$SID'
+auth_token = '$AUTH'
+client = Client(account_sid, auth_token)
 
+# Twilio Functions
+# Alarm Message
+def twilAlarm(channel): 
+   print("Twilio alarm message sent.")
+   message = client.messages \
+    .create(
+         body='Stray spotted, alarm initiated.',
+         from_='+19124612542',
+         to='+$PHONE'
+     )
+   print(message.sid)
+
+# Warning Message
+def twilWarning(channel): 
+   print("Twilio warning message sent.")
+   message = client.messages \
+    .create(
+         body='Suspected poop alert, tread carefully!',
+         from_='+19124612542',
+         to='+$PHONE'
+     )
+   print(message.sid)
+
+# Check Sensor Data
 while True:
     i = GPIO.input(26)
     # No Motion
@@ -33,11 +62,12 @@ while True:
 
     # Motion Detected
     elif i == 1:
-        start = time.time()
         GPIO.output(LED_Green, GPIO.LOW)
         GPIO.output(LED_Yellow, GPIO.HIGH)
         GPIO.output(LED_Red, GPIO.LOW)
         GPIO.output(BUZZER, GPIO.HIGH)
+        twilAlarm()
 
     time.sleep(1)
+
 GPIO.cleanup()
