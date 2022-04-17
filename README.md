@@ -29,6 +29,8 @@ We are using Twilio to send SMS notifications to the registered mobile numbers o
 ## Challenges we ran into 🏃‍♂️
 1. Interfacing an analog sensor with a Raspberry Pi and using it to satiate the problem statement was extremely difficult and took hours of our time.
 2. Initiating Twilio functions within motion detection phases without significant delay was pretty tedious as well.
+3. We tried to build our own Pet Detection model, but given the time constraints, we could not build the model, but resorted to using the TFOD API in order to make the process simpler. 
+4. For the APAC region, we did not have Google Cloud Platform credits to test out the model on and had to rely on the TensorFlow Object Detection documentation which gave us an idea on how to add GCP to our model.
 
 ## Accomplishments that we're proud of 🏅
 1. We were able to create a stray animal detector with an inexpensive setup, without having to actually use a Camera.
@@ -38,4 +40,5 @@ We are using Twilio to send SMS notifications to the registered mobile numbers o
 2. Using Twilio on board an IoT setup.
 
 ## What's next for Doo Doo Alert ⏭
-1. Addition of accurate models with a camera to monitor the whole situation.
+1. The GCP project and storage bucket are to be configured on the Raspberry Pi itself so that most of the computationally heavy work can be processed on the cloud rather than locally. Given the Pi's WiFi capabilities it should make things easier.
+2. Addition of accurate models with a camera to monitor the whole situation.
